@@ -1,10 +1,10 @@
 import express from "express";
-import ProductManager from "./ProductMaganer.js"; // Asegúrate de poner la ruta correcta
+import ProductManager from "./ProductMaganer.js"; 
 
 const app = express();
 const port = 3000;
 
-const productManager = new ProductManager("./Product.json"); // Asegúrate de poner la ruta correcta
+const productManager = new ProductManager("./Product.json"); 
 
 app.get('/', (req, res) =>{
     res.send('Inicio')
