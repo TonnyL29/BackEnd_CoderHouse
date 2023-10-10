@@ -1,0 +1,47 @@
+[
+  {
+    "id": "06f3a6d9-8ac7-401b-843d-da9823e6d2c6",
+    "title": "Nuevo prodcucto",
+    "description": "Desc",
+    "code": "qwe",
+    "price": "152",
+    "stock": "123",
+    "category": "newprod"
+  },
+  {
+    "id": "de9d49b2-a613-4b86-921e-f81907ab813d",
+    "title": "Nuevo prodcucto",
+    "description": "Desc",
+    "code": "qwe",
+    "price": "152",
+    "stock": "123",
+    "category": "newprod"
+  },
+  {
+    "id": "a6662b7b-64f7-41f6-a467-3b0dfb8b1046",
+    "title": "Nuevo prodcucto",
+    "description": "Desc",
+    "code": "qwe",
+    "price": "152",
+    "stock": "123",
+    "category": "newprod"
+  },
+  {
+    "id": "8cb9c747-06e0-46ef-bc8d-643692dd0848",
+    "title": "Nuevo prodcucto",
+    "description": "Desc",
+    "code": "qwe",
+    "price": "152",
+    "stock": "123",
+    "category": "newprod"
+  },
+  {
+    "id": "eaca496a-02e5-40e3-b53f-3a5708abe16a",
+    "title": "Nuevo prodcucto",
+    "description": "Desc",
+    "code": "qwe",
+    "price": "152",
+    "stock": "123",
+    "category": "newprod"
+  }
+]
