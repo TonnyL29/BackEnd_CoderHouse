@@ -22,12 +22,6 @@ class ProductManager {
     // Cargar productos existentes desde el archivo
     const existingProducts = this.loadProducts();
 
-    // Validar que no se repita el campo "code"
-   /* if (existingProducts.some((p) => p.code === product.code)) {
-      console.error("El código del producto ya existe.");
-      return;
-    }*/
-
     const newProduct = {
       ...product,
     };

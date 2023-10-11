@@ -43,5 +43,14 @@
     "price": "152",
     "stock": "123",
     "category": "newprod"
+  },
+  {
+    "id": "69eb719f-be96-4fdd-83b2-236462d19e1e",
+    "title": "Nuevo prodcucto de prueba",
+    "description": "Desc",
+    "code": "qwe",
+    "price": "152",
+    "stock": "123",
+    "category": "newprod"
   }
 ]

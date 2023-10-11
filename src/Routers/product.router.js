@@ -7,14 +7,8 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-
 const router = Router();
 const productManager = new ProductManager(path.join(__dirname, '../Utilities/product.json'));
-
-
-console.log(path.join(__dirname, '../Utilities/product.json'))
-
-
 
 router.get('/products', (req, res) => {
   const limit = req.query.limit;
@@ -24,7 +18,7 @@ router.get('/products', (req, res) => {
   res.json({ products });
 });
 
-router.post('/', (req, res) => {
+router.post('/product', (req, res) => {
   const{ body } = req;
   const newProduct = {
     id: uuiav4(),
@@ -36,7 +30,7 @@ router.post('/', (req, res) => {
 });
 
 
-router.get('/products/:pid', (req, res) => {
+router.get('/product/:pid', (req, res) => {
   const productId = req.params.pid;
   const product = productManager.getProductById(productId);
   res.status(200).json({ product });

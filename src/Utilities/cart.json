@@ -1,0 +1,13 @@
+{
+  "carts": [
+    {
+      "id": "32a5458d-0d93-4536-a640-f8e1f41b2c25",
+      "products": [
+        {
+          "productId": "8cb9c747-06e0-46ef-bc8d-643692dd0848",
+          "quantity": 20
+        }
+      ]
+    }
+  ]
+}
