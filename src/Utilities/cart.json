@@ -5,9 +5,17 @@
       "products": [
         {
           "productId": "8cb9c747-06e0-46ef-bc8d-643692dd0848",
-          "quantity": 20
+          "quantity": 65
         }
       ]
+    },
+    {
+      "id": "a72613f3-4aee-4ab9-8b73-3d1bc143ac7c",
+      "products": []
+    },
+    {
+      "id": "556321f0-0b81-4e81-a833-3e163646b395",
+      "products": []
     }
   ]
 }

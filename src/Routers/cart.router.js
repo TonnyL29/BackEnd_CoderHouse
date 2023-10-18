@@ -11,13 +11,13 @@ const cartManager = new CartManager(
   path.join(__dirname, "../Utilities/cart.json")
 );
 
-router.get("/:cid", (req, res) => {
+router.get("/cart/:cid", (req, res) => {
     const cartId = req.params.cid;
     const cart = cartManager.loadCart(cartId); // Corregir aquí
     res.status(200).json({ cart });
   });
   
-  router.post("/:cid/product/:pid", (req, res) => {
+  router.post("/cart/:cid/product/:pid", (req, res) => {
       const cartId = req.params.cid;
       const productId = req.params.pid;
       const { body } = req;

@@ -6,7 +6,8 @@
     "code": "qwe",
     "price": "152",
     "stock": "123",
-    "category": "newprod"
+    "category": "newprod",
+    "thumbnail": "https://vinotecamasis.com.ar/wp-content/uploads/2021/03/Cerveza-Stella-Arotis-Lata-473-ml.png"
   },
   {
     "id": "de9d49b2-a613-4b86-921e-f81907ab813d",
@@ -24,7 +25,8 @@
     "code": "qwe",
     "price": "152",
     "stock": "123",
-    "category": "newprod"
+    "category": "newprod",
+    "thumbnail": "https://dondelanegra.cl/wp-content/uploads/2020/06/Fernet-mas-vaso.jpg"
   },
   {
     "id": "8cb9c747-06e0-46ef-bc8d-643692dd0848",
@@ -42,15 +44,17 @@
     "code": "qwe",
     "price": "152",
     "stock": "123",
-    "category": "newprod"
+    "category": "newprod",
+    "thumbnail": "https://d1on8qs0xdu5jz.cloudfront.net/webapp/images/fotos/b/0000000020/2183_1.jpg"
   },
   {
     "id": "69eb719f-be96-4fdd-83b2-236462d19e1e",
-    "title": "Nuevo prodcucto de prueba",
+    "title": "prodcucto prueba",
     "description": "Desc",
     "code": "qwe",
     "price": "152",
     "stock": "123",
-    "category": "newprod"
+    "category": "newprod",
+    "thumbnail": "https://ardiaprod.vtexassets.com/arquivos/ids/262641/Gaseosa-CocaCola-Sabor-Original-225-Lts-_2.jpg?v=638322394478700000"
   }
 ]

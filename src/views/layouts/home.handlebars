@@ -1,0 +1,88 @@
+<div class="container mt-5 mb-4 p-4 border rounded shadow" style="width: 60%;">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingTextarea" placeholder="">
+                    <label for="floatingTextarea">Titulo del producto</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingTextarea" placeholder="">
+                    <label for="floatingTextarea">Descripcion</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingTextarea" placeholder="">
+                    <label for="floatingTextarea">Precio $</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingTextarea" placeholder="">
+                    <label for="floatingTextarea">Stock disponible</label>
+                </div>
+                <input class="btn btn-primary" type="submit" value="Agregar producto">
+            </form>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row" id="conteiner"></div>
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.2.0/socket.io.js"></script>
+
+<script type="module">
+    const contenedor = document.getElementById('conteiner');
+    const jsonFilePath = '/api/products';
+
+    // Conéctate al servidor de Socket.io
+    const socket = io();
+
+    fetch(jsonFilePath)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Error al obtener el archivo JSON: ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            const products = data.products;
+
+            console.log('Tipo de products:', typeof products);
+            console.log('Contenido de products:', products);
+
+            // Itera sobre cada producto y renderiza la plantilla
+            products.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'col-md-3'; // Cada tarjeta ocupa 3 columnas en dispositivos medianos (md)
+                card.innerHTML = `
+              <div class="card mt-3" style="margin-bottom: 20px;">
+                <img src="${product.thumbnail || 'https://cdn.pixabay.com/photo/2017/01/25/17/35/picture-2008484_1280.png'}" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title">${product.title}</h5>
+                  <p class="card-text">Descricion: ${product.description}</p>
+                  <p class="card-text">Price: ${product.price}</p>
+                  <p class="card-text">Stock: ${product.stock}</p>
+                  <p class="card-text">Category: ${product.category}</p>
+                  <a href="#" class="btn btn-primary" onclick="editarProducto('${product.id}')">Editar producto</a>
+                </div>
+              </div>
+            `;
+
+                // Agrega la tarjeta al contenedor
+                contenedor.appendChild(card);
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+    // Función para manejar la edición de productos
+    function editarProducto(productId) {
+        // Aquí puedes implementar la lógica para editar el producto
+        console.log(`Editar producto con ID: ${productId}`);
+
+        // Puedes emitir un evento de Socket.io para manejar la edición en el servidor
+        socket.emit('editarProducto', { productId });
+    }
+</script>

@@ -5,11 +5,11 @@ import { fileURLToPath } from 'url';
 
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+export const __dirname = path.dirname(__filename);
 
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
-    const folderPath = path.join(__dirname, '../public/img');
+    const folderPath = path.join(__dirname, '../../public/img');
     console.log('folderPath', folderPath);
     callback(null, folderPath);
   },
