@@ -1,11 +1,9 @@
-import { Router } from 'express';
+import express from 'express';
 
-const router = Router();
+const router = express.Router();
 
-router.get('/realtimeproducts',(req, res)=>{
+router.get('/realtimeproducts', (req, res) => {
     res.render('layouts/home');
-})
-
-
+});
 
 export default router;

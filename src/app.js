@@ -7,6 +7,9 @@ import ProdRouter from "./Routers/product.router.js";
 import CartRoute from "./Routers/cart.router.js";
 import { __dirname } from "./Utilities/utilities.js";
 import realtimeproduct from "./Routers/realtime.router.js";
+import  ProductManager  from './Utilities/ProductMaganer.js'
+
+const productManager = new ProductManager(path.resolve(__dirname, './Product.json'));
 
 const PORT = 8080;
 
@@ -34,18 +37,31 @@ app.use((error, req, res, next) => {
 io.on("connection", (socket) => {
   console.log("Usuario conectado");
 
-  // Maneja el evento editarProducto
-  socket.on("editarProducto", ({ productId }) => {
-    // Aquí debes implementar la lógica para editar el producto con el ID proporcionado
-    console.log(`Editar producto con ID: ${productId}`);
-    
-    // Emite un evento a todos los clientes para que actualicen la información
-    io.emit("productoEditado", { productId });
+  // Escucha el evento de agregar producto desde el cliente
+  socket.on("addProduct", async (newProduct) => {
+    const addedProduct = await productManager.addProduct(newProduct);
+  
+    if (addedProduct !== null) {
+      io.emit("productAdded", { addedProduct });
+      console.log("Producto agregado correctamente:", addedProduct);
+    } else {
+      console.error("Error al agregar el producto.");
+    }
   });
 
-  // ... (otros eventos y lógica de Socket.io)
-
-  // Desconexión del usuario
+  socket.on('deleteProduct', async ({ productId }) => {
+    try {
+        const deletedProduct = await productManager.deleteProduct(productId);
+        if (deletedProduct !== null) {
+            io.emit("productDeleted", { productId });
+            console.log("Producto eliminado correctamente:", deletedProduct);
+        } else {
+            console.error("Error al eliminar el producto.");
+        }
+    } catch (error) {
+        console.error('Error al manejar evento "deleteProduct":', error);
+    }
+});
   socket.on("disconnect", () => {
     console.log("Usuario desconectado");
   });

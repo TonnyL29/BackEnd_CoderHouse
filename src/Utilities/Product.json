@@ -56,5 +56,13 @@
     "stock": "123",
     "category": "newprod",
     "thumbnail": "https://ardiaprod.vtexassets.com/arquivos/ids/262641/Gaseosa-CocaCola-Sabor-Original-225-Lts-_2.jpg?v=638322394478700000"
+  },
+  {
+    "id": "57a49ca9-2d3b-4140-84ff-1c60c8fd5203",
+    "title": "prueba123123",
+    "description": "prueba",
+    "price": "123",
+    "stock": "12",
+    "category": "asd"
   }
 ]

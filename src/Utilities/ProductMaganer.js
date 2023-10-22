@@ -1,5 +1,5 @@
-import { readFileSync, writeFileSync } from "fs";
 import * as fs from 'fs';
+import {v4 as uuiav4} from 'uuid'
 
 
 class ProductManager {
@@ -12,24 +12,32 @@ class ProductManager {
       !product.title ||
       !product.description ||
       !product.price ||
-      !product.code ||
       !product.stock
     ) {
       console.error("Todos los campos son obligatorios.");
-      return;
+      return null; // Retorna null para indicar que hubo un error al agregar el producto
     }
 
-    // Cargar productos existentes desde el archivo
-    const existingProducts = this.loadProducts();
+    try {
+      // Cargar productos existentes desde el archivo
+      const existingProducts = this.loadProducts();
 
-    const newProduct = {
-      ...product,
-    };
-    existingProducts.push(newProduct);
+      const newProduct = {
+        id: product.id || uuiav4(), // Asigna un nuevo ID si no se proporciona
+        ...product,
+      };
 
-    // Guardar el arreglo de productos en el archivo
-    this.saveProducts(existingProducts);
-    console.log("Producto agregado:", newProduct);
+      existingProducts.push(newProduct);
+
+      // Guardar el arreglo de productos en el archivo
+      this.saveProducts(existingProducts);
+      console.log("Producto agregado:", newProduct);
+
+      return newProduct; // Retorna el nuevo producto agregado
+    } catch (error) {
+      console.error("Error al agregar el producto:", error);
+      return null; // Retorna null en caso de error
+    }
   }
 
   getProducts() {
@@ -75,6 +83,7 @@ class ProductManager {
       return null;
     }
   }
+
 
   loadProducts() {
     try {
