@@ -1,7 +1,6 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const productSchema = new Schema({
-    id: { type: String, required: true, unique: true },
     title: { type: String, required: true },
     description: { type: String, requiere: false },
     price: { type: Number, required: true },

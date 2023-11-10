@@ -3,7 +3,7 @@ import express from 'express';
 const router = express.Router();
 
 router.get('/realtimeproducts', (req, res) => {
-    res.render('layouts/home');
+    res.render('home');
 });
 
 export default router;

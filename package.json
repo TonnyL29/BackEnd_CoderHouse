@@ -2,11 +2,11 @@
   "name": "server2.0",
   "version": "1.0.0",
   "description": "",
-  "main": "./src/app.js",
+  "main": "./src/server.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon ./src/app.js"
+    "dev": "nodemon ./src/server.js"
   },
   "keywords": [],
   "author": "",

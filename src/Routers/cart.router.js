@@ -1,39 +1,98 @@
 import { Router } from "express";
-import CartManager from "../Utilities/cartManager.js";
-import path from "path";
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import cartManager from "../dao/cartManeger.js";
 
 const router = Router();
-const cartManager = new CartManager(
-  path.join(__dirname, "../Utilities/cart.json")
-);
 
-router.get("/cart/:cid", (req, res) => {
-    const cartId = req.params.cid;
-    const cart = cartManager.loadCart(cartId); // Corregir aquí
-    res.status(200).json({ cart });
-  });
-  
-  router.post("/cart/:cid/product/:pid", (req, res) => {
-      const cartId = req.params.cid;
-      const productId = req.params.pid;
-      const { body } = req;
-    
-      // Verificar si se proporciona un cuerpo y no es igual a 1
-      const quantity = body && body.quantity !== undefined ? body.quantity : 1;
-    
-      const updatedCart = cartManager.addProductToCart(cartId, productId, quantity); // Corregir aquí
-    
-      res.status(201).json({
-        'carrito numero': cartId,
-        'producto id': productId,
-        'quantity': quantity,
-        'products': updatedCart.products,
-      });
-  })
+router.get("/carts", async (req, res) => {
+    try {
+        const { query = {} } = req;
+        const cart = await cartManager.get(query);
+        res.status(200).json({ cart });
+    } catch (error) {
+        console.error('Error al obtener los carritos:', error);
+        res.status(500).json({ error: 'Error interno del servidor al obtener los carritos' });
+    }
+});
 
+router.put('/carts/:cid/products/:pid', async (req, res) => {
+    try {
+        const { cid, pid } = req.params;
 
-  export default router;
+        const updatedCart = await cartManager.removeProduct(cid, pid);
+
+        res.status(200).json({ message: 'Producto eliminado del carrito correctamente', updatedCart });
+    } catch (error) {
+        console.error('Error al eliminar el producto del carrito:', error);
+        res.status(500).json({ error: 'Error interno del servidor al eliminar el producto del carrito' });
+    }
+});
+
+router.put('/carts/:cid', async (req, res) => {
+    try {
+        const cartId = req.params.cid;
+        const { body } = req;
+
+        // Crear un objeto con los datos del producto
+        const productData = {
+            prod_id: body.prod_id,
+            quantity: body.quantity || 1,
+        };
+
+        // Actualizar el carrito
+        await cartManager.updateCart(cartId, productData);
+
+        res.status(204).end();
+    } catch (error) {
+        console.error('Error al actualizar el carrito:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
+router.delete('/carts/:cid/products/:pid', async (req, res) => {
+    try {
+        const { cid, pid } = req.params;
+
+        const updatedCart = await cartManager.removeProduct(cid, pid);
+
+        res.status(200).json({ message: 'Producto eliminado del carrito correctamente', updatedCart });
+    } catch (error) {
+        console.error('Error al eliminar el producto del carrito:', error);
+        res.status(500).json({ error: 'Error interno del servidor al eliminar el producto del carrito' });
+    }
+});
+
+router.delete('/carts/:cid', async (req, res) => {
+    try {
+        const cartId = req.params.cid;
+
+        await cartManager.removeAllProducts(cartId);
+
+        res.status(204).end();
+    } catch (error) {
+        console.error('Error al eliminar todos los productos del carrito:', error);
+        res.status(500).json({ error: 'Error interno del servidor al eliminar todos los productos del carrito' });
+    }
+});
+
+router.post("/addcart", async (req, res) => {
+    try {
+        const { body } = req;
+
+        const productData = {
+            prod_id: body.prod_id, 
+            quantity: body.quantity || 1,
+        };
+
+        const createdCart = await cartManager.create(productData);
+
+        res.status(201).json({
+            cartCreate: true,
+            cart_id: createdCart._id  // Aquí obtenemos el _id del carrito creado
+        });
+    } catch (error) {
+        console.error('Error al crear el carrito:', error);
+        res.status(500).json({ error: 'Error interno del servidor, al crear el carrito' });
+    }
+});
+
+export default router;
