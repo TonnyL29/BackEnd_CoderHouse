@@ -8,7 +8,8 @@ import ProductRouter from './Routers/product.router.js'
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../../public')));
+
 app.use("/api", CartRoute, ProductRouter);
 
 app.engine("handlebars", handlebars.engine());
