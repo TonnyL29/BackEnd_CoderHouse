@@ -1,47 +1,98 @@
 let div_render = document.getElementById("productos_render");
-let div_toggle_bar = document.getElementById("ul-toggle");
+let ulCart = document.getElementById("ul-toggle");
 
-{
-  /* <li class="nav-item">
-<a class="nav-link active" aria-current="page" href="#">Home</a>
-</li> */
+window.remove = (a, b) => {
+  let URL = `carts/${a}/products/${b}`;
+
+  fetch(URL, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((cartEdit) => {
+      console.log('Producto eliminado del carrito correctamente:', cartEdit);
+      renderCart(cartEdit.updatedCart._id);
+    })
+    .catch((error) => {
+      console.error('Error en la solicitud:', error);
+    });
 }
 
 
 
-window.renderCart = (a) =>{
+window.renderCart = (a) => {
   const cartId = a;
-  const apiUrl = `carts/${cartId}`;
+  const apiUrlCart = `carts/${cartId}`;
+  const apiUrlProduct = 'product/';
+  let cartProduct = [];
+  let data = [];
+  let total = 0;
 
-fetch(apiUrl)
-  .then(response => {
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    return response.json();
-  })
-  .then(cart => {
-    console.log('Carrito obtenido:', cart);
-
-    for (let x = 0; x < cart.product.length; x++) {
-      console.log(cart.product[x]);
-    }
-
-  })
-  .catch(error => {
-    console.error('Error en la solicitud:', error);
-
-  });
-
+  fetch(apiUrlCart)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(cart => {
+      // console.log('Carrito obtenido:', cart);
+      cartProduct.push(cart);
+      const productPromises = cart.product.map(product => {
+        return fetch(`${apiUrlProduct}${product.prod_id}`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then(productData => {
+            data.push(productData);
+            console.log('Producto obtenido:', productData);
+          });
+      });
+      return Promise.all(productPromises);
+    })
+    .then(() => {
+      console.log(cartProduct);
+      let ulCart = document.getElementById('ul-toggle');
+      ulCart.innerHTML = "";
+      for (let i = 0; i < data.length; i++) {
+        console.log(data[i].product)
+        total += data[i].product.price;
+        ulCart.innerHTML += `<li class="nav-item p-2">
+            <div class="d-flex">
+            <img src="${data[i].product.thumbnail}" alt="Descripción de la imagen" class="img-fluid rounded overflow-hidden" style="width: 50px; height: 50px;">
+            <div class="ms-3">
+                <h5>${data[i].product.title}</h5>
+                <p>${data[i].product.description}</p>
+                <p>Cantidad: ${cartProduct[0].product[i].quantity}</p>
+                <p>Precio: $ ${data[i].product.price}</p>
+            </div>
+            </div>
+            <button class="btn btn-primary mb-3" type="button" onclick="remove('${cartProduct[0]._id}','${data[i].product._id}')">Eliminar producto</button>
+            </li>`;
+      }
+    })
+    .catch(error => {
+      console.error('Error en la solicitud:', error);
+    });
 }
+
 
 let cart = localStorage.getItem("cartID");
-cart != null ?  renderCart(cart):console.log("No hay carrito");
-
 
 window.addCart = (a) => {
-  let cart = localStorage.getItem("cartID");
-  if (cart == null) {
+  let cartId = localStorage.getItem("cartID");
+
+  if (cartId === null) {
     const url = "addcart";
     console.log(url);
     const productData = {
@@ -64,34 +115,38 @@ window.addCart = (a) => {
       })
       .then((data) => {
         localStorage.setItem("cartID", data.cart_id);
+        renderCart(data.cart_id);
       })
       .catch((error) => {
         console.error("Error en la solicitud:", error);
       });
   } else {
-    const url = `carts/${cart}`
-    console.log(url)
+    const url = `carts/${cartId}`;
+    console.log(url);
     const productData = {
       prod_id: a,
       quantity: 1,
     };
+
     fetch(url, {
-      method: 'PUT',
+      method: "PUT",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(productData)
+      body: JSON.stringify(productData),
     })
-      .then(response => {
+      .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
+        renderCart(cartId);
       })
-      .catch(error => {
-        console.error('Error en la solicitud:', error);
+      .catch((error) => {
+        console.error("Error en la solicitud:", error);
       });
-    }
+  }
 };
+
 
 const ask_product = async (URL) => {
   try {
@@ -134,6 +189,10 @@ const render = async (a) => {
       </div>`;
   }
 };
+
+if (cart != null) {
+  renderCart(cart)
+}
 
 let params = "";
 render(params);

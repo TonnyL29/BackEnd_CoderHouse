@@ -31,13 +31,17 @@ router.get("/carts", async (req, res) => {
 router.put('/carts/:cid/products/:pid', async (req, res) => {
     try {
         const { cid, pid } = req.params;
-
-        const updatedCart = await cartManager.removeProduct(cid, pid);
-
-        res.status(200).json({ message: 'Producto eliminado del carrito correctamente', updatedCart });
+        const { quantity } = req.body;
+        let updatedCart;
+        if(!quantity){
+            updatedCart = await cartManager.updateCart(cid, pid);  
+        }else{
+            updatedCart = await cartManager.updateCartQuantity(cid, pid, quantity);
+        }
+        res.status(200).json({ message: 'Producto actualizado en el carrito correctamente', updatedCart });
     } catch (error) {
-        console.error('Error al eliminar el producto del carrito:', error);
-        res.status(500).json({ error: 'Error interno del servidor al eliminar el producto del carrito' });
+        console.error('Error al actualizar el producto en el carrito:', error);
+        res.status(500).json({ error: 'Error interno del servidor al actualizar el producto en el carrito' });
     }
 });
 

@@ -42,6 +42,28 @@ export default class cartManager {
         }
     }
 
+    static async updateCartQuantity(cartId, productId, quantity) {
+        try {
+            const cart = await cartrModel.findById(cartId);
+            if (!cart) {
+                throw new Error('No existe el carrito');
+            }    
+            const existingProduct = cart.product.find(
+                (p) => {
+                    return p.prod_id.toString() === productId;
+                }
+            );    
+            if (existingProduct) {
+                existingProduct.quantity += quantity;
+            }    
+            await cart.save();
+            console.log('Carrito actualizado correctamente');
+            return cart;
+        } catch (error) {
+            console.error('Error al actualizar el carrito:', error);
+            throw new Error('Error interno del servidor al actualizar el carrito');
+        }
+    }
     static async updateCart(cartId, productData) {
         try {
             const cart = await cartrModel.findById(cartId);
