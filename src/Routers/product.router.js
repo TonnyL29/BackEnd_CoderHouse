@@ -32,9 +32,9 @@ router.get("/products", async (req, res) => {
     }
 });
 
-router.get('/', (req, res) =>{
-    res.render('products');
-})
+// router.get('/storage-product', (req, res) =>{
+//     res.render('products');
+// })
 
 
 router.get("/product/:pid", async (req, res) => {

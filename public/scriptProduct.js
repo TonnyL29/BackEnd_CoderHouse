@@ -17,55 +17,53 @@ window.remove = (a, b) => {
       return response.json();
     })
     .then((cartEdit) => {
-      console.log('Producto eliminado del carrito correctamente:', cartEdit);
+      //console.log('Producto eliminado del carrito correctamente:', cartEdit);
       renderCart(cartEdit.updatedCart._id);
     })
     .catch((error) => {
-      console.error('Error en la solicitud:', error);
+      console.error("Error en la solicitud:", error);
     });
-}
-
-
+};
 
 window.renderCart = (a) => {
   const cartId = a;
   const apiUrlCart = `carts/${cartId}`;
-  const apiUrlProduct = 'product/';
+  const apiUrlProduct = "product/";
   let cartProduct = [];
   let data = [];
   let total = 0;
 
   fetch(apiUrlCart)
-    .then(response => {
+    .then((response) => {
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       return response.json();
     })
-    .then(cart => {
+    .then((cart) => {
       // console.log('Carrito obtenido:', cart);
       cartProduct.push(cart);
-      const productPromises = cart.product.map(product => {
+      const productPromises = cart.product.map((product) => {
         return fetch(`${apiUrlProduct}${product.prod_id}`)
-          .then(response => {
+          .then((response) => {
             if (!response.ok) {
               throw new Error(`HTTP error! Status: ${response.status}`);
             }
             return response.json();
           })
-          .then(productData => {
+          .then((productData) => {
             data.push(productData);
-            console.log('Producto obtenido:', productData);
+            //console.log('Producto obtenido:', productData);
           });
       });
       return Promise.all(productPromises);
     })
     .then(() => {
-      console.log(cartProduct);
-      let ulCart = document.getElementById('ul-toggle');
+      //console.log(cartProduct);
+      let ulCart = document.getElementById("ul-toggle");
       ulCart.innerHTML = "";
       for (let i = 0; i < data.length; i++) {
-        console.log(data[i].product)
+        //console.log(data[i].product)
         total += data[i].product.price;
         ulCart.innerHTML += `<li class="nav-item p-2">
             <div class="d-flex">
@@ -81,11 +79,10 @@ window.renderCart = (a) => {
             </li>`;
       }
     })
-    .catch(error => {
-      console.error('Error en la solicitud:', error);
+    .catch((error) => {
+      console.error("Error en la solicitud:", error);
     });
-}
-
+};
 
 let cart = localStorage.getItem("cartID");
 
@@ -94,7 +91,6 @@ window.addCart = (a) => {
 
   if (cartId === null) {
     const url = "addcart";
-    console.log(url);
     const productData = {
       prod_id: a,
       quantity: 1,
@@ -122,7 +118,6 @@ window.addCart = (a) => {
       });
   } else {
     const url = `carts/${cartId}`;
-    console.log(url);
     const productData = {
       prod_id: a,
       quantity: 1,
@@ -146,7 +141,6 @@ window.addCart = (a) => {
       });
   }
 };
-
 
 const ask_product = async (URL) => {
   try {
@@ -191,8 +185,29 @@ const render = async (a) => {
 };
 
 if (cart != null) {
-  renderCart(cart)
+  renderCart(cart);
 }
+
+const logoutbtn = document.getElementById("logout");
+
+logoutbtn.addEventListener("click", async () => {
+  console.log("Logout button clicked"); // Añade este log para debug
+  const url = "logout";
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    if(data.statusLogout){
+      window.location.href = '../api/';
+    }
+})
 
 let params = "";
 render(params);

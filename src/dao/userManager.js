@@ -2,14 +2,14 @@ import userModel from '../models/user.model.js'
 
 export default  class userManager {
 
-    static async get(query = {}) {
-        const criteria = {};
-        if(query.user_id){
-            criteria.user_id = query.user_id
-        }
-        const user = await userModel.find(criteria);
-        return user;
-    }
+    // static async get(query = {}) {
+    //     const criteria = {};
+    //     if(query.user_id){
+    //         criteria.user_id = query.user_id
+    //     }
+    //     const user = await userModel.find(criteria);
+    //     return user;
+    // }
 
     static async create(data) {
         const user = await userModel.create(data);
@@ -50,4 +50,23 @@ export default  class userManager {
             throw error;
         }
     }
+    static async authenticate(usernameOrEmail, password) {
+        if (!usernameOrEmail || !password) {
+            throw new Error('Nombre de usuario o correo electrónico y contraseña son obligatorios');
+        }
+        // Buscar al usuario por nombre de usuario o correo electrónico
+        const user = await userModel.findOne({
+            $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
+            password: password,
+        });
+        if (!user) {
+            throw new Error('Credenciales incorrectas');
+        }
+        console.log('Usuario autenticado correctamente');
+    
+        const { _id, username, name, lastname, email, status } = user;
+        return { _id, username, name, lastname, email, status };
+    }
+    
+    
 }

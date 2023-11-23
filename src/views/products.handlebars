@@ -1,16 +1,22 @@
 <nav class="navbar navbar-dark bg-dark fixed-top mb-5">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">E-commerce BackEnd CoderHouse</a>
-        <button class="navbar-toggler me-4" type="button" data-bs-toggle="offcanvas"
+        <span class="navbar-brand">E-commerce BackEnd CoderHouse</span>
+        <span class="navbar-brand">Bienvenido: {{UserName}}, eres un {{status}}</span>
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
             data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation">
             <span class="material-symbols-outlined">
                 shopping_cart
             </span>
         </button>
+        <button class="navbar-toggler me-4" type="button" id="logout">
+            <span class="material-symbols-outlined">
+                logout
+            </span>
+        </button>
         <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar"
             aria-labelledby="offcanvasDarkNavbarLabel">
             <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Tu carrito</h5>
+                <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Tu carrito {{UserName}} contiene estos productos:</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
                     aria-label="Close"></button>
             </div>
@@ -27,3 +33,4 @@
 
     </div>
 </div>
+<script type="module" src="../scriptProduct.js"></script>

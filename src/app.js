@@ -1,26 +1,38 @@
-import express from "express";
-import handlebars from "express-handlebars";
-import path from "path";
-import CartRoute from "./Routers/cart.router.js";
-import { __dirname } from "./Utilities/utilities.js";
+import express from 'express';
+import handlebars from 'express-handlebars';
+import path from 'path';
+import CartRoute from './Routers/cart.router.js';
+import { __dirname } from './Utilities/utilities.js';
 import ProductRouter from './Routers/product.router.js'
+import sessionRouter from './Routers/session.router.js'
+import expressSession from 'express-session'
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../../public')));
 
-app.use("/api", CartRoute, ProductRouter);
+const session_secret = 'l7Hj)[=;YQ0sR<1%dhC>53q&';
 
-app.engine("handlebars", handlebars.engine());
-app.set("views", path.join(__dirname, "../views"));
-app.set("view engine", "handlebars");
+app.use(expressSession({
+  secret: session_secret,
+  resave: true,
+  saveUninitialized: true,
+}))
+
+
+
+app.use('/api', CartRoute, ProductRouter, sessionRouter);
+
+app.engine('handlebars', handlebars.engine());
+app.set('views', path.join(__dirname, '../views'));
+app.set('view engine', 'handlebars');
 
 
 app.use((error, req, res, next) => {
   const message = `Hubo un error desconocido: ${error.message}`;
   console.log(message);
-  res.status(500).json({ status: "error", message });
+  res.status(500).json({ status: 'error', message });
 });
 
 
