@@ -1,0 +1,32 @@
+<main>
+
+    <div class="contenedor__todo">
+        <div class="caja__trasera">
+            <div class="caja__trasera-login">
+                <h3>Recupera tu Password</h3>
+                <p>Ingresa tu email y usuario para validarte</p>
+                <button id="btn__iniciar-sesion">Recuperar Password</button>
+            </div>
+            <div class="caja__trasera-register">
+                <h3>¿Olvidaste tu contraseña?</h3>
+                <p>Completa tus datos, usuario y mail, para validarte</p>
+                <p>Luego agrega tu nuevo Password</p>
+            </div>
+        </div>
+
+        <!--Formulario de Login y registro-->
+        <div class="contenedor__login-register">
+            <!--Login-->
+            <form action="" class="formulario__login">
+                <h2>Recuperar Password</h2>
+                <input id="email" type="text" placeholder="Correo Electronico">
+                <input id="user" type="text" placeholder="Usuario">
+                <input id="passNew" type="password" placeholder="Contraseña nueva">
+                <input id="passRepeat" type="password" placeholder="Repite Contraseña">
+
+                <button type="button" id="recovery">Cambiar Password</button>
+            </form>
+        </div>
+    </div>
+</main>
+<script type="module" src="../script_recover.js"></script>
