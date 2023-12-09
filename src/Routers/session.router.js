@@ -1,65 +1,52 @@
 import { Router } from "express";
 import userManager from '../dao/userManager.js'
-import { hashPassword, validatePassword } from '../Utilities/utilities.js'
+import { hashPassword, validPassword } from '../Utilities/utilities.js'
+import passport from "passport";
+import prodRouter from './product.router.js'
 
 const router = Router();
 
-router.post('/login', async (req, res) => {
-    try {
-      const { username, password } = req.body;
-      if (!username || !password) {
-        return res.status(400).json({ error: 'Nombre de usuario y contraseña son obligatorios' });
-      }
-  
-      const user = await userManager.authenticate(username, password);
-  
-      req.session.user = user;
-      req.session.status = user.status;
-      console.log(user)
-      res.json({ message: 'Inicio de sesión exitoso', user, statusLogin: true });
-    } catch (error) {
-      console.error(error);
-      res.status(401).json({ error: 'Credenciales incorrectas', statusLogin: false });
-    }
-  });
-  
 
 const auth = (req, res, next) => {
-    if (req.session.user && req.session.status) {
-        if (req.session.status != 'block') {
-            next();
-        }
+    console.log("Session Passport: ")
+    console.log(req.session.passport)
+    if (req.session.passport.user.email && req.session.passport.user.status) {
+        next();
     } else {
-        res.status(401).send('no tiene permisos para acceder')
+        res.status(401).send('No tiene permisos para acceder');
     }
-}
-
+};
 router.get('/private', auth, (req, res) => {
-    const UserName = req.session.user.name;
-    const status = req.session.user.status;
-    res.render('products', { UserName, status });
+    const UserName = req.session.passport.user.name;
+    const status = req.session.passport.user.status;
+    res.render('products',{UserName,  status});
+
+});
+
+router.get('/sessions/github', passport.authenticate('github', { scope: ['user:email'] }));
+
+router.get('/sessions/github_callback', passport.authenticate('github', { failureRedirect: '/login' }), (req, res) => {
+  req.session.user = req.user;
+  res.redirect('../private')
 })
 
-router.post('/register', async (req, res) => {
-    try {
-        const userData = req.body;
-        if (!userData.username || !userData.password || !userData.email || !userData.name || !userData.lastname) {
-            return res.status(400).json({ error: 'Todos los campos son obligatorios' });
-        }
-        const hashedPassword = await hashPassword(userData.password);
-        const user = await userManager.create({ ...userData, password: hashedPassword });
-        
-        res.json({ message: 'Usuario creado correctamente', user, statusRegister: true });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Error al crear el usuario', statusRegister: false });
+
+router.post('/login', passport.authenticate('login', { failureRedirect: '/' }), (req, res) => {
+    console.log(req.session)
+    req.session.user = req.user.email;
+    res.redirect('private')
+});
+//router.use('products', prodRouter);
+
+router.post('/register', passport.authenticate('register', { failureRedirect: '/' }), (req, res) => {
+    if (req.user) {
+        res.status(201).json({ message: 'Usuario creado correctamente', statusRegister: true });
+    } else {
+        res.status(400).json({ message: 'Error en el registro', statusRegister: false });
     }
 });
 
-
-
 router.get('/logout', (req, res) => {
-    // Destruir la sesión
     req.session.destroy((err) => {
         if (err) {
             console.error('Error al cerrar sesión:', err);
@@ -73,7 +60,7 @@ router.get('/', (req, res) => {
     res.render('login');
 })
 
-router.get('/recoverPass', (req, res)=>{
+router.get('/recoverPass', (req, res) => {
     res.render('recoverPass');
 })
 

@@ -32,9 +32,6 @@ router.get("/products", async (req, res) => {
     }
 });
 
-// router.get('/storage-product', (req, res) =>{
-//     res.render('products');
-// })
 
 
 router.get("/product/:pid", async (req, res) => {

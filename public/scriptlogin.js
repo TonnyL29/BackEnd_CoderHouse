@@ -8,47 +8,68 @@ document
   const loginButton = document.getElementById("login");
 
   loginButton.addEventListener("click", async () => {
-    try {
+
       let email = document.getElementById("email_login").value;
       let pass = document.getElementById("pass_login").value;
-  
-      const url = "login";
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: email,
-          password: pass,
-        }),
-      });
-  
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-  
-      const data = await response.json();
-      if(data.statusLogin){
-        window.location.href = 'private';
-      }
-  
-    } catch (error) {
-      const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.onmouseenter = Swal.stopTimer;
-          toast.onmouseleave = Swal.resumeTimer;
+      try {
+        const url = "api/login";
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email: email,
+                password: pass
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
         }
-      });
-      Toast.fire({
-        icon: "error",
-        title: "Error al iniciar sesion, verifique!"
-      });
+
+        // No necesitas parsear la respuesta porque el backend está redirigiendo
+
+        if (response.redirected) {
+            // El backend redirigió al frontend, obtén la URL de redirección desde la respuesta
+            const redirectUrl = response.url;
+
+            // Realiza la redirección en el frontend
+            window.location.href = redirectUrl;
+        } else {
+            // El backend no redirigió, maneja la respuesta como sea necesario
+            const data = await response.json();
+
+            if (data.status) {
+                Toast.fire({
+                    icon: "success",
+                    title: "Login correcto, estas siendo redireccionado"
+                });
+
+                // Redirigir al usuario al frontend usando la URL proporcionada por el backend
+                window.location.href = data.redirect;
+            } else {
+                Toast.fire({
+                    icon: "error",
+                    title: "⚠️ Error al logearte:  contacta al administrador"
+                });
+            }
+        }
+    } catch (error) {
+        console.error(error);
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+        });
+
+        Toast.fire({
+            icon: "error",
+            title: "⚠️ Error al logearte, contacta al administrador"
+        });
     }
   });
   

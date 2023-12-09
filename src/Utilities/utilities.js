@@ -31,7 +31,22 @@ export const hashPassword = async (password) => {
   return hashedPassword;
 };
 
-export const validatePassword = async (password, userPass) => {
-  const isValid = await bcrypt.compare(password, userPass);
-  return isValid;
+export const validPassword = async (password, user) => {
+  console.log(password);
+  console.log(user.password);
+
+  try {
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (isPasswordValid) {
+      //console.log('Contraseña válida');
+      return true;
+    } else {
+      //console.log('Contraseña inválida');
+      return false;
+    }
+  } catch (error) {
+    console.error('Error al comparar contraseñas:', error);
+    return false;
+  }
 };

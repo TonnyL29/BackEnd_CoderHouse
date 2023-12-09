@@ -1,5 +1,5 @@
 import userModel from '../models/user.model.js'
-import { validatePassword } from '../Utilities/utilities.js';
+import { validPassword } from '../Utilities/utilities.js';
 
 export default  class userManager {
     static async create(data) {
@@ -51,7 +51,7 @@ export default  class userManager {
           $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
         });
     
-        if (!user || !validatePassword(password, user.password)) {
+        if (!user || !validPassword(password, user.password)) {
           throw new Error('Credenciales incorrectas');
         }
     
