@@ -40,11 +40,14 @@ initLocal();
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use((error, req, res, next) => {
-  const message = `Hubo un error desconocido: ${error.message}`;
-  console.log(message);
-  res.status(500).json({ status: 'error', message });
+app.use((req, res, next) => {
+  res.render('error404')
 });
 
+app.use((error, req, res, next) => {
+    const message = `Hubo un error desconocido: ${error.message}`;
+    console.log(message);
+    res.render('error500')
+  });
 
 export default app;
