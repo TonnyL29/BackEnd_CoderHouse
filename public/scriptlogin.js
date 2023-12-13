@@ -12,7 +12,7 @@ document
       let email = document.getElementById("email_login").value;
       let pass = document.getElementById("pass_login").value;
       try {
-        const url = "api/login";
+        const url = "login";
         const response = await fetch(url, {
             method: "POST",
             headers: {

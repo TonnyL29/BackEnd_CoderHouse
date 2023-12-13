@@ -3,16 +3,17 @@ import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as GithubStrategy } from 'passport-github2';
 import userModel from '../models/user.model.js';
 import { hashPassword, validPassword } from '../Utilities/utilities.js';
-
+import dotenv from 'dotenv';
+dotenv.config()
 const opts = {
     usernameField: 'email',
     passReqToCallback: true,
 };
 
 const githubOpts = {
-  clientID: 'Iv1.96ac2683fd89f417', // Este dato debe ser pasado por parametro
-  clientSecret: '71b809c30ab9d7137bdfa009936e43b5d98bdb7d', // Este dato debe ser pasado por parametro
-  callbackURL: "http://localhost:8080/api/sessions/github_callback", // Este dato debe ser pasado por parametro
+  clientID: process.env.CLIENTEID, 
+  clientSecret: process.env.CLIENTESECRET, 
+  callbackURL: process.env.CALLGITHUB, 
 };
 
 export const init = () => {

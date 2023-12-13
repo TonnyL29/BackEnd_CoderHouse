@@ -10,13 +10,15 @@ import expressSession from 'express-session'
 import { init as initLocal} from './config/passport.config.js'
 import { URI } from './db/mongodb.js'
 import MongoStore from 'connect-mongo';
+import dotenv from 'dotenv';
+dotenv.config()
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../../public')));
 
-const session_secret = 'l7Hj)[=;YQ0sR<1%dhC>53q&';
+const session_secret = process.env.SECRETSESSION;
 
 app.use(expressSession({
   secret: session_secret,
