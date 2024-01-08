@@ -76,7 +76,12 @@ router.post('/recovery', async (req, res) => {
     }
 });
 
+router.get('/chat', auth, (req, res) => {
+    const UserName = req.session.passport.user.name;
+    const status = req.session.passport.user.status;
+    res.render('message');
 
+});
 
 
 export default router;

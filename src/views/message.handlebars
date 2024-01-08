@@ -1,0 +1,90 @@
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+    }
+
+    #chat-container {
+        max-width: 600px;
+        margin: 20px auto;
+        background-color: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    #chat-messages {
+        padding: 20px;
+        overflow-y: auto;
+        max-height: 300px;
+    }
+
+    #chat-input {
+        padding: 10px;
+        border-top: 1px solid #ccc;
+        display: flex;
+    }
+
+    #message-input {
+        flex: 1;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-right: 10px;
+    }
+
+    #send-button {
+        padding: 8px 15px;
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+</style>
+</head>
+
+<body>
+
+    <div id="chat-container">
+        <div id="chat-messages">
+            <!-- Aquí se mostrarán los mensajes del chat -->
+        </div>
+        <div id="chat-input">
+            <input type="text" id="message-input" placeholder="Escribe tu mensaje...">
+            <button id="send-button" onclick="sendMessage()">Enviar</button>
+        </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function sendMessage() {
+            var messageInput = document.getElementById("message-input");
+            var messageText = messageInput.value;
+
+            if (messageText.trim() !== "") {
+                console.log('Enviando mensaje al servidor:', messageText);
+                socket.emit('chat message', messageText);
+                chatMessages.appendChild(newMessage);
+                messageInput.value = "";
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        }
+
+        const socket = io();
+
+        socket.on('connect', () => {
+            console.log('Conectado al servidor de Socket.io');
+        });
+
+        socket.on('chat message', (msg) => {
+            $('#chat-messages').append($('<div>').text(msg));
+        });
+
+        socket.on('disconnect', () => {
+            console.log('Desconectado del servidor de Socket.io');
+        });
+    </script>
+</body>

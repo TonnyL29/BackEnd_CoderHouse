@@ -12,7 +12,7 @@ document
       let email = document.getElementById("email_login").value;
       let pass = document.getElementById("pass_login").value;
       try {
-        const url = "login";
+        const url = "./api/login";
         const response = await fetch(url, {
             method: "POST",
             headers: {
@@ -87,7 +87,7 @@ registerButton.addEventListener("click", async () => {
     let iuser = document.getElementById("iuser").value;
     let ipass = document.getElementById("ipass").value;
 
-    const url = "register";
+    const url = "./api/register";
     const response = await fetch(url, {
       method: "POST",
       headers: {
